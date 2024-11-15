@@ -28,6 +28,15 @@ public class TodoController {
         }
     }
 
+    @GetMapping("/todos/{id}")
+    public ResponseEntity<?> getSingleTodos(@PathVariable("id") String id){
+        Optional<TodoDTO> todOptional = todoRepo.findById(id);
+        if (todOptional.isPresent()) {
+            return new ResponseEntity<>(todOptional.get(), HttpStatus.OK);
+        } else {
+            return   new ResponseEntity<>("no availavle",HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/todos")
     public ResponseEntity<?> createTodo(@RequestBody TodoDTO todo){
@@ -37,16 +46,6 @@ public class TodoController {
             return new ResponseEntity<TodoDTO>(todo, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/todos/{id}")
-    public ResponseEntity<?> getSingleTodos(@PathVariable("id") String id){
-        Optional<TodoDTO> todOptional = todoRepo.findById(id);
-        if (todOptional.isPresent()) {
-            return new ResponseEntity<>(todOptional.get(), HttpStatus.OK);
-        } else {
-            return   new ResponseEntity<>("no availavle",HttpStatus.NOT_FOUND);
         }
     }
 
@@ -64,5 +63,18 @@ public class TodoController {
         } else {
             return   new ResponseEntity<>("no availavle",HttpStatus.NOT_FOUND);
         }
+    }
+
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity<?> deleteTodos(@PathVariable("id") String id){
+        if (todoRepo.findById(id).isPresent()){
+            todoRepo.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("no availavle",HttpStatus.NOT_FOUND);
+        }
+
+
+
     }
 }
