@@ -18,7 +18,6 @@ public class TodoDTO {
     private String todo;
     @NotNull(message = "desc cannot be null")
     private String desc;
-    @NotNull(message = "completed cannot be null")
     private boolean completed;
     private Date cratedAt;
     private Date updatedAt;
